@@ -68,17 +68,32 @@ cd scim-examples/docker/
 
 #### Docker Compose
 
-When using Docker Compose, you can create the environment variable `OP_SESSION` manually by doing the following:
+When using Docker Compose, you’ll be modifying the provided `[scim-examples/docker/compose/scim.env](./compose/scim.env)` file to complete the configuration of your SCIM Bridge.
+
+First, copy your `scimsession` file to the `compose/` directory.
 
 ```bash
-# only needed for Docker Compose - use Docker Secrets when using Swarm
-# enter the ‘compose’ directory within `scim-examples/docker/`
-cd compose/
-SESSION=$(cat /path/to/scimsession | base64 | tr -d "\n")
-sed -i '' -e "s/OP_SESSION=$/OP_SESSION=$SESSION/" ./scim.env
+cd scim-examples/docker/compose/
+cp /path/to/scimsession ./
 ```
 
-You’ll also need to set the environment variable `OP_LETSENCRYPT_DOMAIN` within `scim.env` to the URL you selected during [PREPARATION.md](/PREPARATION.md). Open that in your preferred text editor and change `OP_LETSENCRYPT_DOMAIN` to that domain name.
+Confirm that you see the `scimsession` file in the same directory as the `scim.env` file and `docker-compose.yml`.
+
+```bash
+ls
+>docker-compose.yml     scim.env        scimsession
+```
+
+Then, you’ll be encoding your `scimsession` file as a Base64-encoded string, and placing it into the `scim.env` file as the `OP_SESSION` variable.
+
+```bash
+SESSION=$(cat ./scimsession | base64 | tr -d "\n")
+sed -i '' -e "s/^OP_SESSION=.*$/OP_SESSION=$SESSION/" ./scim.env
+```
+
+You’ll also need to set the environment variable `OP_LETSENCRYPT_DOMAIN` within `scim.env` to the URL you selected during [PREPARATION.md](/PREPARATION.md). 
+
+Open `scim.env` in your preferred text editor and change `OP_LETSENCRYPT_DOMAIN` to that domain name. (i.e: `OP_LETSENCRYPT_DOMAIN=scim.yourdomain.com`)
 
 And finally, use `docker-compose` to deploy:
 
