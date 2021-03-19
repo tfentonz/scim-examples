@@ -29,7 +29,6 @@ Note: If you are not using Route53, you don't need to set the zone id and can re
 Now run the following commands (Note: If you are not using Route53 the second command is unnecessary):
 ```
 terraform init
-terraform apply -target=aws_acm_certificate.scim_bridge_cert
 terraform plan -out=./op-scim.plan
 # Validate what this plan does by reading it
 terraform apply ./op-scim.plan
@@ -39,3 +38,5 @@ If you are using something other than Route53 for your domain name, point your d
 After a few minutes, if you go to the SCIM Bridge URL you set, you should be able to enter your bearer token to verify that your scim bridge is up and running. Connect to your IdP using step 3 [here](https://support.1password.com/scim/) and go to your 1Password account and check that provisioning is on in Setting -> Provisioning and you should be good to go!
 
 If you want to check out the logs for your scim bridge, in AWS go to Cloudwatch -> Log Groups and you should see the log group that was printed out at the end of your terraform apply. You can then see the scim-bridge and redis container logs. 
+
+Note: If you are using this as a guide but not running it exactly, ensure that you are `base64url` encoding the scimsession and storing it in a secret as plaintext (not json, not wrapped in quotation marks)
