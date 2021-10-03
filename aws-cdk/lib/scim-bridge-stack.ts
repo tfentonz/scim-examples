@@ -21,22 +21,10 @@ export class ScimBridgeStack extends Stack {
 
     // The code that defines your stack goes here
 
-    // const domainName = new CfnParameter(this, 'DomainName', {
-    //   type: 'String',
-    //   description: 'Domain name',
-    //   default: 'scim-bridge.example.com',
-    //   minLength: 1,
-    //   maxLength: 253,
-    // });
-
     const hostedZone = new CfnParameter(this, 'HostedZone', {
       type: 'AWS::Route53::HostedZone::Id',
       description: 'Hosted zone',
     });
-
-    // const vpc = new ec2.Vpc(this, 'VPC', {
-    //   maxAzs: 3,
-    // });
 
     const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
       isDefault: true,
